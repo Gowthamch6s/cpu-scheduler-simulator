@@ -1,8 +1,25 @@
-processes = [
-    {"pid": "P1", "arrival_time": 0, "burst_time": 5, "priority": 2},
-    {"pid": "P2", "arrival_time": 1, "burst_time": 3, "priority": 1},
-    {"pid": "P3", "arrival_time": 2, "burst_time": 8, "priority": 3},
-]
+def get_processes_from_user():
+    processes = []
+
+    number_of_processes = int(input("Enter the number of processes: "))
+
+    for i in range(number_of_processes):
+        print(f"\nEnter details for Process P{i + 1}")
+
+        arrival_time = int(input("Arrival Time: "))
+        burst_time = int(input("Burst Time: "))
+        priority = int(input("Priority: "))
+
+        process = {
+            "pid": f"P{i + 1}",
+            "arrival_time": arrival_time,
+            "burst_time": burst_time,
+            "priority": priority
+        }
+
+        processes.append(process)
+
+    return processes
 
 
 def fcfs_scheduling(processes):
@@ -52,9 +69,7 @@ def priority_scheduling(processes):
 
         selected_process = min(available_processes, key=lambda x: x["priority"])
 
-        start_time = current_time
-        completion_time = start_time + selected_process["burst_time"]
-
+        completion_time = current_time + selected_process["burst_time"]
         turnaround_time = completion_time - selected_process["arrival_time"]
         waiting_time = turnaround_time - selected_process["burst_time"]
 
@@ -179,7 +194,10 @@ def print_execution_order(schedule):
         print(f"{item['pid']} runs from {item['start_time']} to {item['end_time']}")
 
 
-print("Processes:")
+# Main program starts here
+processes = get_processes_from_user()
+
+print("\nProcesses:")
 for process in processes:
     print(process)
 
@@ -190,7 +208,7 @@ priority_result = priority_scheduling(processes)
 print_results("Priority Scheduling Results", priority_result)
 
 print("\nRound Robin Scheduling")
-time_quantum = 2
+time_quantum = int(input("Enter Time Quantum for Round Robin: "))
 
 rr_schedule, rr_result = round_robin_scheduling(processes, time_quantum)
 
